@@ -1,5 +1,4 @@
 // logger.js
-const chalk = require('chalk');
 
 function formatTime(date) {
   return date.toLocaleTimeString('en-US', {
@@ -21,12 +20,11 @@ function formatMetadata(meta) {
     if (key in meta) {
       const value = meta[key];
       if (key === 'status') {
-        const color = value >= 500 ? 'red' : value >= 400 ? 'yellow' : value >= 300 ? 'cyan' : 'green';
-        formatted.push(`${chalk.gray(key)}: ${chalk[color](value)}`);
+        formatted.push(`${key}: ${value}`);
       } else if (key === 'duration_ms') {
-        formatted.push(`${chalk.gray('duration')}: ${chalk.magenta(value + 'ms')}`);
+        formatted.push(`duration: ${value}ms`);
       } else {
-        formatted.push(`${chalk.gray(key)}: ${chalk.white(value)}`);
+        formatted.push(`${key}: ${value}`);
       }
     }
   }
@@ -35,11 +33,11 @@ function formatMetadata(meta) {
   const errorKeys = Object.keys(meta).filter(k => k.toLowerCase().includes('error'));
   for (const key of errorKeys) {
     if (meta[key]) {
-      formatted.push(`${chalk.red(key)}: ${chalk.red(meta[key])}`);
+      formatted.push(`${key}: ${meta[key]}`);
     }
   }
 
-  return formatted.length ? chalk.gray(' [') + formatted.join(chalk.gray(' | ')) + chalk.gray(']') : '';
+  return formatted.length ? ` [${formatted.join(' | ')}]` : '';
 }
 
 function safeStringify(v) {
@@ -53,54 +51,47 @@ function safeStringify(v) {
 function log(level, message, meta = {}) {
 
   // Console formatting
-  const timestamp = chalk.gray(formatTime(new Date()));
+  const timestamp = formatTime(new Date());
   const metadata = JSON.stringify(meta);
 
   let levelFormatted;
-  let messageFormatted;
   let icon;
 
   switch (level) {
     case 'info':
       icon = '○';
-      levelFormatted = chalk.blue(icon + ' INFO ');
-      messageFormatted = chalk.white(message);
+      levelFormatted = icon + ' INFO ';
       break;
     case 'warn':
       icon = '⚠';
-      levelFormatted = chalk.yellow(icon + ' WARN ');
-      messageFormatted = chalk.yellow(message);
+      levelFormatted = icon + ' WARN ';
       break;
     case 'error':
       icon = '✖';
-      levelFormatted = chalk.red(icon + ' ERROR');
-      messageFormatted = chalk.red(message);
+      levelFormatted = icon + ' ERROR';
       break;
     case 'debug':
       icon = '⚡';
-      levelFormatted = chalk.magenta(icon + ' DEBUG');
-      messageFormatted = chalk.gray(message);
+      levelFormatted = icon + ' DEBUG';
       break;
     case 'success':
       icon = '✓';
-      levelFormatted = chalk.green(icon + ' OK   ');
-      messageFormatted = chalk.green(message);
+      levelFormatted = icon + ' OK   ';
       break;
     default:
       icon = '•';
-      levelFormatted = chalk.white(icon + ` ${level.toUpperCase()}`);
-      messageFormatted = chalk.white(message);
+      levelFormatted = icon + ` ${level.toUpperCase()}`;
   }
 
   // Build the final log line with padding and alignment
-  const logLine = `${timestamp} ${levelFormatted} ${messageFormatted}${metadata}`;
+  const logLine = `${timestamp} ${levelFormatted} ${message}${metadata}`;
 
   // Output to console
   if (level === 'error') {
     console.error(logLine);
     // If there's an error stack, print it with proper formatting
     if (meta.error?.stack) {
-      console.error(chalk.red('  └─ ') + chalk.red(meta.error.stack.replace(/\n/g, '\n     ')));
+      console.error('  └─ ' + meta.error.stack.replace(/\n/g, '\n     '));
     }
   } else {
     console.log(logLine);
