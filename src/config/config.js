@@ -1,9 +1,9 @@
 // config.js
 module.exports = {
   PORT: process.env.PORT || 3000,
-  API_KEY: process.env.API_KEY || "3000",
+  API_KEY: process.env.API_KEY || "your-api-key-here",
   MAX_CONCURRENT_JOBS: process.env.MAX_CONCURRENT_JOBS || 2,
-  FILE_SIZE_LIMIT: process.env.FILE_SIZE_LIMIT || 1024 * 1024 * 1024 * 5, // 5 GB
+  FILE_SIZE_LIMIT: process.env.FILE_SIZE_LIMIT || 1024 * 1024 * 1024 * 10, // 5 GB
   ALLOWED_EXTENSIONS: process.env.ALLOWED_EXTENSIONS || [
     "mp4",
     "wav",

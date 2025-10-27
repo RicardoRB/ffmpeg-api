@@ -133,7 +133,7 @@ function runFfmpeg(jobId, template, inputPath, outputExt, jobRecord) {
     ff.stderr.on("data", (d) => {
       const s = d.toString();
       stderr += s;
-      log("debug", "ffmpeg_stderr_chunk", { jobId, chunk: s.slice(0, 500) });
+      // log("debug", "ffmpeg_stderr_chunk", { jobId, chunk: s });
     });
 
     ff.on("error", (err) => {
@@ -158,12 +158,12 @@ function runFfmpeg(jobId, template, inputPath, outputExt, jobRecord) {
         });
       } else {
         jobRecord.status = "ERROR";
-        jobRecord.error = `ffmpeg exited with code ${code}. stderr: ${stderr.slice(0, 1000)}`;
+        jobRecord.error = `ffmpeg exited with code ${code}. stderr: ${stderr}`;
         jobRecord.finishedAt = new Date().toISOString();
         log("error", "runFfmpeg: ffmpeg failed", {
           jobId,
           exitCode: code,
-          stderrSnippet: stderr.slice(0, 1000),
+          stderrSnippet: stderr,
         });
       }
       resolve();
