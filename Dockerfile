@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM node:18-alpine
+FROM node:20-alpine
 
 # instalar ffmpeg y herramientas de compilación (si no necesitas build tools puedes quitar build-base python3)
 RUN apk add --no-cache ffmpeg curl build-base python3
