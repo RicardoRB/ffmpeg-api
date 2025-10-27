@@ -20,6 +20,8 @@ app.use(routes);
 setInterval(cleanupJobs, config.CLEANUP_INTERVAL);
 
 // Start server
-app.listen(config.PORT, "0.0.0.0", () => {
+var server = app.listen(config.PORT, "0.0.0.0", () => {
   log("info", "server_started", { port: config.PORT });
 });
+
+server.timeout = config.SERVER_TIMEOUT || 10 * 60 * 1000; // 10 minutes
