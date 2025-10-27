@@ -10,7 +10,7 @@ WORKDIR /app
 COPY package.json ./
 
 # instalar solo producción (si necesitas dev deps en build o dev, ajustar)
-RUN npm install --prod
+RUN npm install --omit=dev
 
 # copiar el resto del proyecto (node_modules está en .dockerignore)
 COPY . .
