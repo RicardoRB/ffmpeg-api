@@ -55,7 +55,7 @@ function parseCommandArgs(cmdStr) {
   let current = "";
   let inSingle = false;
   let inDouble = false;
-  
+
   for (let i = 0; i < cmdStr.length; i++) {
     const ch = cmdStr[i];
     if (ch === "'" && !inDouble) {
@@ -128,6 +128,7 @@ function runFfmpeg(jobId, template, inputPath, outputExt, jobRecord) {
     ff.stdout.on("data", (d) => {
       const s = d.toString();
       stdout += s;
+      jobRecord.lastStdout = s;
       if (s.length < 1000) log("debug", "ffmpeg_stdout", { jobId, data: s });
     });
     ff.stderr.on("data", (d) => {
